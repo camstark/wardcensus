@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<head>
+    <title>Ward map fill by housing type</title>
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+</head>
+
+<div id="main-wrapper">
+
+    <div id="metrics">
+        <div id="instruct"><em>Select one or more type of housing. <br/>Wards are coloured by most common among selection.</em></div>
+    <!--    <div id="attributes"> -->
+        <div id="housing">
+            <h3>Calgary Housing Stock</h3>
+            <ul>
+         <!--   <li data-metric="attribute1" class="selected attribute1">One</li>
+            <li data-metric="attribute2" class="selected attribute2">Two</li>
+            <li data-metric="attribute3" class="selected attribute3">Three</li>
+            <li data-metric="attribute4" class="selected attribute4">Four</li>
+		-->	
+			<li data-metric="SING_FAMLY" class="selected SING_FAMLY">Single Family</li>
+            <li data-metric="APARTMENT" class="selected APARTMENT">Apartment</li>
+            <li data-metric="TOWN_HOUSE" class="selected TOWN_HOUSE">Townhouse</li>
+            <li data-metric="DUPLEX" class="selected DUPLEX">Duplex</li>
+            <li data-metric="CONV_STRUC" class="selected CONV_STRUC">Converted Structure</li>
+            <li data-metric="MULTI_PLEX" class="selected MULTI_PLEX">Multiplex</li>
+			
+            </ul>
+        </div>
+<!--
+        <div id="non-motor">
+            <h3>Non-motor Vehicle</h3>
+            <ul>
+                <li data-metric="HC01_EST_VC11" class="selected HC01_EST_VC11">Walk</li>
+                <li data-metric="HC01_EST_VC12" class="selected HC01_EST_VC12">Bicycle</li>
+                <li data-metric="HC01_EST_VC14" class="selected HC01_EST_VC14">Work from Home</li>
+            </ul>
+        </div>
+-->
+        <div class="clr"></div>
+    </div><!-- @end #metrics -->
+
+    <div id="tooltip" class="tooltip">
+        <h3 class="name"></h3>
+        <div data-metric="SING_FAMLY" class="line">
+            <div class="SING_FAMLY symbol"></div> Single Family 
+            <div class="SING_FAMLY_val val"></div>
+        </div>
+        <div data-metric="APARTMENT" class="line">
+            <div class="APARTMENT symbol"></div> Apartment
+            <div class="APARTMENT_val val"></div>
+        </div>
+        <div data-metric="TOWN_HOUSE" class="line">
+            <div class="TOWN_HOUSE symbol"></div> Townhouse
+            <div class="TOWN_HOUSE_val val"></div>
+        </div>
+        <div data-metric="DUPLEX" class="line">
+            <div class="DUPLEX symbol"></div> Duplex
+            <div class="DUPLEX_val val"></div>
+        </div>
+        <div data-metric="CONV_STRUC" class="line">
+            <div class="CONV_STRUC symbol"></div> Converted Structure
+            <div class="CONV_STRUC_val val"></div>
+        </div>
+        <div data-metric="MULTI_PLEX" class="line">
+            <div class="MULTI_PLEX symbol"></div> Multiplex
+            <div class="MULTI_PLEX_val val"></div>
+        </div>
+    </div>	
+    
+</div><!-- @end #main-wrapper -->
+
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+
+<script>
+//var width = 960,
+//    height = 600,
+//    center = [width / 2, height / 2],
+//    defaultFill = "#e0e0e0";
+
+var width = 500,
+	height = 700,
+	defaultFill = "#e0e0e0",
+	active = d3.select(null);
+    
+var wardByNum = d3.map();
+
+var projection = d3.geo.azimuthalEqualArea()
+	.rotate([100, -45,10])
+	.center([-9.9,5.16])
+	.scale(95000)
+	//.scale(500)
+	.translate([width/2, height/2])
+	;
+
+var path = d3.geo.path()
+    .projection(projection);
+
+// Color scale
+//var color = d3.scale.linear().domain([0,100]).range(["#ffffff", "#8dd3c7"]).interpolate(d3.interpolateLab);
+/*
+var baseColors = { 
+    "attribute1": d3.scale.linear().domain([0,100]).range(["#ffffff", "#8dd3c7"]).interpolate(d3.interpolateLab),
+    "attribute2": d3.scale.linear().domain([0,100]).range(["#ffffff", "#bc80bd"]).interpolate(d3.interpolateLab),
+    "attribute3": d3.scale.linear().domain([0,100]).range(["#ffffff", "#bebada"]).interpolate(d3.interpolateLab),
+    "attribute4": d3.scale.linear().domain([0,100]).range(["#ffffff", "#fb8072"]).interpolate(d3.interpolateLab),
+};
+*/
+var baseColors = { 
+    "SING_FAMLY": d3.scale.linear().domain([0,80]).range(["#ffffff", "#386cb0"]).interpolate(d3.interpolateLab),
+    "DUPLEX": d3.scale.linear().domain([0,10]).range(["#ffffff", "#beaed4"]).interpolate(d3.interpolateLab),
+    "MULTI_PLEX": d3.scale.linear().domain([0,1]).range(["#ffffff", "#ffff99"]).interpolate(d3.interpolateLab),
+    "APARTMENT": d3.scale.linear().domain([0,80]).range(["#ffffff", "#f0027f"]).interpolate(d3.interpolateLab),
+    "TOWN_HOUSE": d3.scale.linear().domain([0,20]).range(["#ffffff", "#7fc97f"]).interpolate(d3.interpolateLab),
+    "CONV_STRUC": d3.scale.linear().domain([0,10]).range(["#ffffff", "#fdc086"]).interpolate(d3.interpolateLab),
+};
+
+
+
+var svg = d3.select("body #main-wrapper").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var g = svg.append("g");
+
+var tooltip = d3.select("#tooltip")
+ .attr("class", "tooltip")
+ .style("opacity", 0);
+ 
+ /////////////////////
+ 
+ 		svg.append("rect")
+			.attr("class", "background")
+			.attr("width", width)
+			.attr("height", height)
+			.style("fill", "none")
+			.on("click", reset);
+			
+		//var g = svg.append("g")
+		//	.style("stroke-width", "1.5px");
+
+	function clicked(d) {
+	  if (active.node() === this) return reset();
+	  active.classed("active", false);
+	  active = d3.select(this).classed("active", true);
+
+	  var bounds = path.bounds(d),
+		  dx = bounds[1][0] - bounds[0][0],
+		  dy = bounds[1][1] - bounds[0][1],
+		  x = (bounds[0][0] + bounds[1][0]) / 2,
+		  y = (bounds[0][1] + bounds[1][1]) / 2,
+		  scale = .7 / Math.max(dx / width, dy / height),
+		  translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+	  g.transition()
+		  .duration(750)
+		  .style("stroke-width", 1.5 / scale + "px")
+		  .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+	}
+	
+	function reset() {
+	  active.classed("active", false);
+	  active = d3.select(null);
+
+	  g.transition()
+		  .duration(750)
+		  .style("stroke-width", "1.5px")
+		  .attr("transform", "");
+	}
+ 
+ 
+ //////////////////////
+
+//var CURR_SELECT = ["attribute1"];
+//var CURR_SELECT = ["attribute1","attribute2","attribute3","attribute4"];
+var CURR_SELECT = ["SING_FAMLY","DUPLEX","MULTI_PLEX","APARTMENT","TOWN_HOUSE","CONV_STRUC"];
+
+
+// Load data
+queue()
+    .defer(d3.json, "data/wards.json")
+    //.defer(d3.json, "data/us.json")
+    //.defer(d3.csv, "data/commute_subset_moe.csv", typeAndSet)
+    //.defer(d3.csv, "data/warddatatest.csv", typeAndSet)
+    .defer(d3.csv, "data/CENSUS_WARD_2014.csv", processWardData)
+    .await(ready);
+
+// After loading the data...
+function ready(error, wards) {
+
+    // County borders
+    g.append("g")
+        .attr("class", "counties")
+        .selectAll("path")
+          .data(topojson.feature(wards, wards.objects.collection).features)  //replace "counties" with "collection"
+        .enter().append("path")
+          .attr("d", path)
+		  
+		  .on("mouseover", function(d) {
+			 d3.select(this).classed("selected", true);
+			 tooltip.transition().duration(100)
+			   .style("opacity", 1)
+			 if (d3.event.pageX > (width - 200)) {
+				 tooltip.style("left", (d3.event.pageX - 210) + "px");
+			 } else {
+				 tooltip.style("left", (d3.event.pageX + 20) + "px")
+					  .style("top", (d3.event.pageY -30) + "px");
+			 }
+			 if (d3.event.pageY > (height - 150)) {
+				 tooltip.style("top", (d3.event.pageY -140) + "px");
+			 } else {
+				 tooltip.style("top", (d3.event.pageY -30) + "px");
+			 }
+
+			 //tooltip.select(".name").text(wardByNum.get(d.properties.WARD_NUM)['name']);
+			 tooltip.select(".name").text(wardByNum.get(d.properties.WARD_NUM)['LABEL']);
+			 tooltip.select(".SING_FAMLY_val.val").text(d3.round(wardByNum.get(d.properties.WARD_NUM)["SING_FAMLY"]) + "%")
+			 tooltip.select(".DUPLEX_val.val").text(d3.round(wardByNum.get(d.properties.WARD_NUM)["DUPLEX"]) + "%")
+			 tooltip.select(".MULTI_PLEX_val.val").text(d3.round(wardByNum.get(d.properties.WARD_NUM)["MULTI_PLEX"]) + "%")
+			 tooltip.select(".APARTMENT_val.val").text(d3.round(wardByNum.get(d.properties.WARD_NUM)["APARTMENT"]) + "%")
+			 tooltip.select(".TOWN_HOUSE_val.val").text(d3.round(wardByNum.get(d.properties.WARD_NUM)["TOWN_HOUSE"]) + "%")
+			 tooltip.select(".CONV_STRUC_val.val").text(d3.round(wardByNum.get(d.properties.WARD_NUM)["CONV_STRUC"]) + "%")
+		/*	 tooltip.select(".HC01_EST_VC04_val.val").text(d3.round(commuteById.get(d.id)["HC01_EST_VC04"]) + "%")
+			 tooltip.select(".HC01_EST_VC05_val.val").text(d3.round(commuteById.get(d.id)["HC01_EST_VC05"]) + "%")
+			 tooltip.select(".HC01_EST_VC10_val.val").text(d3.round(commuteById.get(d.id)["HC01_EST_VC10"]) + "%")
+			 tooltip.select(".HC01_EST_VC11_val.val").text(d3.round(commuteById.get(d.id)["HC01_EST_VC11"]) + "%")
+			 tooltip.select(".HC01_EST_VC12_val.val").text(d3.round(commuteById.get(d.id)["HC01_EST_VC12"]) + "%")
+			 tooltip.select(".HC01_EST_VC13_val.val").text(d3.round(commuteById.get(d.id)["HC01_EST_VC13"]) + "%")
+			 tooltip.select(".HC01_EST_VC14_val.val").text(d3.round(commuteById.get(d.id)["HC01_EST_VC14"]) + "%")
+
+			 tooltip.select(".HC01_EST_VC04_val.moe").html("&plusmn;" + commuteById.get(d.id)["HC01_MOE_VC04"] + "%")
+			 tooltip.select(".HC01_EST_VC05_val.moe").html("&plusmn;" + commuteById.get(d.id)["HC01_MOE_VC05"] + "%")
+			 tooltip.select(".HC01_EST_VC10_val.moe").html("&plusmn;" + commuteById.get(d.id)["HC01_MOE_VC10"] + "%")
+			 tooltip.select(".HC01_EST_VC11_val.moe").html("&plusmn;" + commuteById.get(d.id)["HC01_MOE_VC11"] + "%")
+			 tooltip.select(".HC01_EST_VC12_val.moe").html("&plusmn;" + commuteById.get(d.id)["HC01_MOE_VC12"] + "%")
+			 tooltip.select(".HC01_EST_VC13_val.moe").html("&plusmn;" + commuteById.get(d.id)["HC01_MOE_VC13"] + "%")
+			 tooltip.select(".HC01_EST_VC14_val.moe").html("&plusmn;" + commuteById.get(d.id)["HC01_MOE_VC14"] + "%")
+		*/
+		   })
+		.on("mouseout", function() {
+			d3.select(this).classed("selected", false);
+			tooltip.transition().duration(300)
+			  .style("opacity", 0);
+			})
+		.on("click", clicked)
+		;
+	
+					/*			var wards = g.selectAll(".ward") // create SVG path element
+								.data(topojson.feature(
+									wardGeom,wardGeom.objects.collection).features)
+								.enter() //create elements for each community
+								.append("path") // append elements to svg
+								.attr("class", "wards") //class name for styling  -- use "community" for ugly colours to distinguish from above.
+								.attr("id", function(d) { return "YYC" + d.properties.WARD_NUM })
+								.attr("d", path) //project data as geometry in svg
+								//.style("fill", function(d) {return commTypeColors[d.properties.CLASS]})
+								.style("fill", "grey")
+								.style("stroke-width", ".5px")
+								  //.attr("class", "feature") //Adding these two lines
+								  .on("click", clicked)		//for click-zoom...
+								.on("mouseover", highlight)
+								.on("mouseout", dehighlight)
+								.on("mousemove", moveLabel)
+								.append("desc")
+									.text(function(d) {
+										return "grey"})
+										//return commTypeColors[d.properties.CLASS]})
+								;
+						*/
+    // State borders
+    g.append("path")
+        .datum(topojson.mesh(wards, wards.objects.collection, function(a, b) { return a !== b; }))
+        .attr("class", "states")
+        .attr("d", path);
+    
+    // Update county fill colors based on current selection
+    updateClasses();
+	
+    // Make filter buttons interactive
+    d3.selectAll("#metrics li")
+        .on("click", function() {
+            var item = d3.select(this);
+            if (item.classed("selected")) {
+                item.attr("class", "");
+                removeFromArray(CURR_SELECT, item.attr("data-metric"));
+                
+            } else {
+                item.classed("selected " + item.attr("data-metric"), true);
+                CURR_SELECT.push(item.attr("data-metric"));
+            }
+
+            updateClasses();
+        });
+
+}
+
+
+function updateClasses() {
+    svg.selectAll(".counties path")
+    //    .attr("fill", function(d) { return color(wardByNum.get(d.properties.WARD_NUM).attribute1); });
+        .attr("fill", function(d) { return colorByGreatest(d.properties.WARD_NUM); });
+	//	.attr("fill", function(d) {  console.log(d.properties.WARD_NUM); })
+		;
+}
+
+function colorByGreatest(WARD_NUM) {
+    
+    var wardObject = wardByNum.get(WARD_NUM);
+
+    if (typeof wardObject !== "undefined") {
+        var values = [];
+        for (var i = 0; i < CURR_SELECT.length; i++) {
+            values.push(wardObject[CURR_SELECT[i]]);
+        }
+        var maxValue = d3.max(values);
+        var maxIndex = values.indexOf(maxValue);
+        var metric = CURR_SELECT[maxIndex];
+		//return baseColors[metric](maxValue); IF ELSE BELOW TO DEAL WITH CHOOSING NONE
+		if (metric === undefined){ return defaultFill; }
+			else { return baseColors[metric](maxValue); }
+    } 
+    
+    else {
+        return "#ffffff";
+    }
+    
+}
+
+function typeAndSet(d) {
+	d.attribute1 = +d.attribute1;
+	d.attribute2 = +d.attribute2;
+	d.attribute3 = +d.attribute3;
+	d.attribute4 = +d.attribute4;
+	wardByNum.set(d.WARD_NUM, d);
+}
+
+function processWardData(d) {
+
+	d.SING_FAMLY = +d.SING_FAMLY / +d.DWELL_CNT * 100;
+	d.DUPLEX = +d.DUPLEX / +d.DWELL_CNT * 100;
+	d.MULTI_PLEX = +d.MULTI_PLEX / +d.DWELL_CNT * 100;
+	d.APARTMENT = +d.APARTMENT / +d.DWELL_CNT * 100;
+	d.TOWN_HOUSE = +d.TOWN_HOUSE / +d.DWELL_CNT * 100;
+	d.CONV_STRUC = +d.CONV_STRUC / +d.DWELL_CNT * 100;
+	wardByNum.set(d.WARD_NUM, d);
+}
+
+// Removes values from an array
+function removeFromArray(arr) {
+    var what, a = arguments, L = a.length, ax;
+    while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax= arr.indexOf(what)) !== -1) {
+            arr.splice(ax, 1);
+        }
+    }
+    return arr;
+}
+
+</script>
