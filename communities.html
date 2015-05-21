@@ -190,13 +190,13 @@ queue()
     .await(ready);
 
 // After loading the data...
-function ready(error, communities) {
+function ready(error, wards) {
 
     // County borders
     g.append("g")
         .attr("class", "counties")
         .selectAll("path")
-          .data(topojson.feature(communities, communities.objects.collection).features)  //replace "counties" with "collection"
+          .data(topojson.feature(wards, wards.objects.collection).features)  //replace "counties" with "collection"
         .enter().append("path")
           .attr("d", path)
 		/*  
