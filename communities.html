@@ -186,7 +186,7 @@ queue()
     //.defer(d3.csv, "data/commute_subset_moe.csv", typeAndSet)
     //.defer(d3.csv, "data/warddatatest.csv", typeAndSet)
     //.defer(d3.csv, "data/CENSUS_WARD_2014.csv", processWardData)
-    .defer(d3.tsv, "data/communitydata.tsv", processCommunityData)
+    .defer(d3.csv, "data/communitydata.csv", processCommunityData)
     .await(ready);
 
 // After loading the data...
