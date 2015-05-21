@@ -272,10 +272,10 @@ function ready(error, wards) {
 								;
 						*/
     // State borders
-   /* g.append("path")
+    g.append("path")
         .datum(topojson.mesh(wards, wards.objects.collection, function(a, b) { return a !== b; }))
         .attr("class", "states")
-        .attr("d", path);*/
+        .attr("d", path);
     
     // Update county fill colors based on current selection
     //updateClasses();
