@@ -181,7 +181,7 @@ var CURR_SELECT = ["SING_FAMLY","DUPLEX","MULTI_PLEX","APARTMENT","TOWN_HOUSE","
 // Load data
 queue()
     //.defer(d3.json, "data/wards.json")
-    .defer(d3.json, "data/communities.simplify.2.7.json")
+    .defer(d3.json, "data/communities.json")
     //.defer(d3.json, "data/us.json")
     //.defer(d3.csv, "data/commute_subset_moe.csv", typeAndSet)
     //.defer(d3.csv, "data/warddatatest.csv", typeAndSet)
@@ -196,7 +196,7 @@ function ready(error, wards) {
     g.append("g")
         .attr("class", "counties")
         .selectAll("path")
-          .data(topojson.feature(wards, wards.objects.collection).features)  //replace "counties" with "collection"
+          .data(topojson.feature(communities, communities.objects.collection).features)  //replace "counties" with "collection"
         .enter().append("path")
           .attr("d", path)
 		/*  
@@ -272,10 +272,10 @@ function ready(error, wards) {
 								;
 						*/
     // State borders
-    g.append("path")
+   /* g.append("path")
         .datum(topojson.mesh(wards, wards.objects.collection, function(a, b) { return a !== b; }))
         .attr("class", "states")
-        .attr("d", path);
+        .attr("d", path);*/
     
     // Update county fill colors based on current selection
     //updateClasses();
