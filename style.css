@@ -1,0 +1,108 @@
+/* Normalize */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td, legend {
+	margin: 0;
+	padding: 0;
+}
+h1,h2,h3,h4,h5,h6 { font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 100%; }
+address, caption, cite, code, dfn, th, var { font-style: normal; font-weight: normal; }
+table { border-collapse: collapse; border-spacing: 0; }
+fieldset,img { border: 0; }
+caption,th { text-align: left; }
+/* @end */
+
+
+#main-wrapper {
+    width: 960px;
+    margin: 0 auto;
+}
+#metrics { width: 920px; margin: 0 auto 15px 0; font-family: Helvetica, sans-serif; }
+#metrics #instruct { 
+    text-align: left; 
+    margin-bottom: 10px;
+    margin-right: 20px; 
+    float: left; 
+    /*width: 210px;*/ 
+    width: 150px; 
+    font-size: 14px; 
+    line-height: 1.4em;
+    font-family: Georgia, serif;
+}
+#metrics h3 { font-size: 13px; font-family: Helvetica, sans-serif; text-align: center; margin-bottom: 0; }
+#metrics ul { font-size: 12px; font-family: Helvetica, sans-serif; margin-left: 0; padding: 0; }
+#metrics ul li { 
+    list-style: none; 
+    margin: 10px 10px 0 0; 
+    padding: 4px 0; 
+    display: inline-block;
+    width: 108px;
+    /*background: #e0e0e0;*/
+    cursor: pointer;
+    text-align: center;
+    font-size: 11px;
+    border: 1px solid #e0e0e0;
+}
+#metrics ul li.bottom { margin-bottom: 0; }
+#metrics #housing { width: 370px; float: left; margin-right: 15px; }
+#metrics #attributes { width: 250px; float: left; margin-right: 15px; }
+#metrics #motor { width: 250px; float: left; border-right: 1px solid #ccc; margin-right: 15px; }
+#metrics #non-motor { width: 250px; float: left; padding-left: 5px;  }
+#metrics .block-button { width: 80px; display: block; float:left; clear:both; }
+div.tooltip {
+    position: absolute;
+    text-align: left;
+    width: 170px;
+    padding: 10px;
+    font-size: 10px;
+    font-family: Helvetica, sans-serif;
+    background: #ffffff;
+    pointer-events: none;
+    opacity: 0;
+	border: 1px solid #797979;
+	border-radius: 5px;
+}
+div.tooltip h3 { 
+  font-size: 12px; margin: 0 0 7px 0; 
+  line-height: 1.2em;
+}
+div.tooltip .line { clear: both; margin-top: 3px; font-size: 11px; }
+div.tooltip .symbol { float: left; width: 6px; height: 6px; margin: 3px 4px 0 0; }
+div.tooltip .val { float: right; width: 25px; text-align: right; margin-right: 4px; }
+div.tooltip .moe { float: right; color: #aaa; width: 30px; text-align: right; }
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+.button { fill: #000; }
+.counties {
+  fill: #e0e0e0;
+}
+.states {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+}
+
+.counties path.selected {
+    /*stroke: #000;
+    stroke-width: 0.5px;*/
+	fill: #e0e0e0;
+}
+
+
+path.SING_FAMLY, #metrics ul li.selected.SING_FAMLY, .tooltip .SING_FAMLY { fill: #386cb0; background: #386cb0; }
+path.DUPLEX, #metrics ul li.selected.DUPLEX, .tooltip .DUPLEX { fill: #beaed4; background: #beaed4; }
+path.MULTI_PLEX, #metrics ul li.selected.MULTI_PLEX, .tooltip .MULTI_PLEX { fill: #ffff99; background: #ffff99; }
+path.APARTMENT, #metrics ul li.selected.APARTMENT, .tooltip .APARTMENT { fill: #f0027f; background: #f0027f; } 
+path.TOWN_HOUSE, #metrics ul li.selected.TOWN_HOUSE, .tooltip .TOWN_HOUSE { fill: #7fc97f; background: #7fc97f; } 
+path.CONV_STRUC, #metrics ul li.selected.CONV_STRUC, .tooltip .CONV_STRUC { fill: #fdc086; background: #fdc086; } 
+
+
+path.attribute1, #metrics ul li.selected.attribute1, .tooltip .attribute1 { fill: #8dd3c7; background: #8dd3c7; }
+path.attribute2, #metrics ul li.selected.attribute2, .tooltip .attribute2 { fill: #bc80bd; background: #bc80bd; }
+path.attribute3, #metrics ul li.selected.attribute3, .tooltip .attribute3 { fill: #bebada; background: #bebada; }
+path.attribute4, #metrics ul li.selected.attribute4, .tooltip .attribute4 { fill: #fb8072; background: #fb8072; }
+path.NODATA{ fill: #fff; }
+
+
+.clr { clear: both; }
