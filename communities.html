@@ -109,12 +109,12 @@ var baseColors = {
 };
 */
 var baseColors = { 
-    "SING_FAMLY": d3.scale.linear().domain([0,80]).range(["#ffffff", "#386cb0"]).interpolate(d3.interpolateLab),
-    "DUPLEX": d3.scale.linear().domain([0,10]).range(["#ffffff", "#beaed4"]).interpolate(d3.interpolateLab),
-    "MULTI_PLEX": d3.scale.linear().domain([0,1]).range(["#ffffff", "#ffff99"]).interpolate(d3.interpolateLab),
-    "APARTMENT": d3.scale.linear().domain([0,80]).range(["#ffffff", "#f0027f"]).interpolate(d3.interpolateLab),
-    "TOWN_HOUSE": d3.scale.linear().domain([0,20]).range(["#ffffff", "#7fc97f"]).interpolate(d3.interpolateLab),
-    "CONV_STRUC": d3.scale.linear().domain([0,10]).range(["#ffffff", "#fdc086"]).interpolate(d3.interpolateLab),
+    "SING_FAMLY": d3.scale.linear().domain([0,100]).range(["#ffffff", "#386cb0"]).interpolate(d3.interpolateLab),
+    "DUPLEX": d3.scale.linear().domain([0,100]).range(["#ffffff", "#beaed4"]).interpolate(d3.interpolateLab),
+    "MULTI_PLEX": d3.scale.linear().domain([0,100]).range(["#ffffff", "#ffff99"]).interpolate(d3.interpolateLab),
+    "APARTMENT": d3.scale.linear().domain([0,100]).range(["#ffffff", "#f0027f"]).interpolate(d3.interpolateLab),
+    "TOWN_HOUSE": d3.scale.linear().domain([0,100]).range(["#ffffff", "#7fc97f"]).interpolate(d3.interpolateLab),
+    "CONV_STRUC": d3.scale.linear().domain([0,100]).range(["#ffffff", "#fdc086"]).interpolate(d3.interpolateLab),
 };
 
 
@@ -368,7 +368,8 @@ function processCommunityData(d) {
 	d.TOWN_HOUSE = +d.TOWN_HOUSE / +d.DWELL_CNT * 100;
 	d.CONV_STRUC = +d.CONV_STRUC / +d.DWELL_CNT * 100;
 	commByNum.set(d.COMM_CODE, d);
-	console.log(d);
+	console.log(d.COMM_CODE);
+	console.log(d.NAME)
 }
 
 // Removes values from an array
