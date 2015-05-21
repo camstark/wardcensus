@@ -219,6 +219,12 @@ function ready(error, wards) {
 			 //tooltip.select(".name").text(wardByNum.get(d.properties.WARD_NUM)['name']);
 			 //tooltip.select(".name").text(wardByNum.get(d.properties.WARD_NUM)['LABEL']);
 			 tooltip.select(".name").text(commByNum.get(d.properties.COMM_CODE)['NAME']);
+			 tooltip.select(".SING_FAMLY_val.val").text(d3.round(commByNum.get(d.properties.COMM_CODE)["SING_FAMLY"]) + "%")
+			 tooltip.select(".DUPLEX_val.val").text(d3.round(commByNum.get(d.properties.COMM_CODE)["DUPLEX"]) + "%")
+			 tooltip.select(".MULTI_PLEX_val.val").text(d3.round(commByNum.get(d.properties.COMM_CODE)["MULTI_PLEX"]) + "%")
+			 tooltip.select(".APARTMENT_val.val").text(d3.round(commByNum.get(d.properties.COMM_CODE)["APARTMENT"]) + "%")
+			 tooltip.select(".TOWN_HOUSE_val.val").text(d3.round(commByNum.get(d.properties.COMM_CODE)["TOWN_HOUSE"]) + "%")
+			 tooltip.select(".CONV_STRUC_val.val").text(d3.round(commByNum.get(d.properties.COMM_CODE)["CONV_STRUC"]) + "%")
 			 //tooltip.select(".SING_FAMLY_val.val").text(d3.round(wardByNum.get(d.properties.WARD_NUM)["SING_FAMLY"]) + "%")
 			 //tooltip.select(".DUPLEX_val.val").text(d3.round(wardByNum.get(d.properties.WARD_NUM)["DUPLEX"]) + "%")
 			 //tooltip.select(".MULTI_PLEX_val.val").text(d3.round(wardByNum.get(d.properties.WARD_NUM)["MULTI_PLEX"]) + "%")
