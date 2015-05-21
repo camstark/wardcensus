@@ -85,7 +85,7 @@ var width = 500,
 	defaultFill = "#e0e0e0",
 	active = d3.select(null);
     
-var wardByNum = d3.map();
+var commByNum = d3.map();
 
 var projection = d3.geo.azimuthalEqualArea()
 	.rotate([100, -45,10])
@@ -190,7 +190,7 @@ queue()
     .await(ready);
 
 // After loading the data...
-function ready(error, wards) {
+function ready(error, communities) {
 
     // County borders
     g.append("g")
