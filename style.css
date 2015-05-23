@@ -66,8 +66,9 @@ div.tooltip h3 {
 }
 div.tooltip .line { clear: both; margin-top: 3px; font-size: 11px; }
 div.tooltip .symbol { float: left; width: 6px; height: 6px; margin: 3px 4px 0 0; }
-div.tooltip .val { float: right; width: 25px; text-align: right; margin-right: 4px; }
-div.tooltip .moe { float: right; color: #aaa; width: 30px; text-align: right; }
+div.tooltip .valmoe { float: right; width: 25px; text-align: right; margin-right: 4px; }
+div.tooltip .per { float: right; width: 25px; text-align: right; margin-right: 4px; }
+div.tooltip .val { float: right; color: #aaa; width: 30px; text-align: right; }
 .overlay {
   fill: none;
   pointer-events: all;
@@ -97,6 +98,12 @@ path.APARTMENT, #metrics ul li.selected.APARTMENT, .tooltip .APARTMENT { fill: #
 path.TOWN_HOUSE, #metrics ul li.selected.TOWN_HOUSE, .tooltip .TOWN_HOUSE { fill: #7fc97f; background: #7fc97f; } 
 path.CONV_STRUC, #metrics ul li.selected.CONV_STRUC, .tooltip .CONV_STRUC { fill: #fdc086; background: #fdc086; } 
 
+path.SING_FAMLY, #metrics ul li.selected.SING_FAMLY_per, .tooltip .SING_FAMLY { fill: #386cb0; background: #386cb0; }
+path.DUPLEX, #metrics ul li.selected.DUPLEX_per, .tooltip .DUPLEX { fill: #beaed4; background: #beaed4; }
+path.MULTI_PLEX, #metrics ul li.selected.MULTI_PLEX_per, .tooltip .MULTI_PLEX { fill: #ffff99; background: #ffff99; }
+path.APARTMENT, #metrics ul li.selected.APARTMENT_per, .tooltip .APARTMENT { fill: #f0027f; background: #f0027f; } 
+path.TOWN_HOUSE, #metrics ul li.selected.TOWN_HOUSE_per, .tooltip .TOWN_HOUSE { fill: #7fc97f; background: #7fc97f; } 
+path.CONV_STRUC, #metrics ul li.selected.CONV_STRUC_per, .tooltip .CONV_STRUC { fill: #fdc086; background: #fdc086; } 
 
 path.attribute1, #metrics ul li.selected.attribute1, .tooltip .attribute1 { fill: #8dd3c7; background: #8dd3c7; }
 path.attribute2, #metrics ul li.selected.attribute2, .tooltip .attribute2 { fill: #bc80bd; background: #bc80bd; }
@@ -106,3 +113,31 @@ path.NODATA{ fill: #fff; }
 
 
 .clr { clear: both; }
+
+.chart rect {
+  fill: steelblue;
+}
+
+.chart text {
+  fill: black;
+  font: 10px sans-serif;
+  text-anchor: middle;
+}
+
+div.bartip {
+    position: absolute;
+    text-align: left;
+    /*width: 170px;*/
+    padding: 10px;
+    font-size: 10px;
+    font-family: Helvetica, sans-serif;
+    background: #ffffff;
+    pointer-events: none;
+    opacity: 0;
+	border: 1px solid #797979;
+	border-radius: 5px;
+}
+div.bartip h3 { 
+  font-size: 12px; margin: 0 0 7px 0; 
+  line-height: 1.2em;
+}

@@ -3,6 +3,11 @@
     <title>Community map fill by housing type</title>
     <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
 </head>
+<svg class="chart"></svg>
+    <div id="bartip" class="bartip">
+        <h3 class="name"></h3>
+		<div class="val"></div>
+	</div>
 
 <div id="main-wrapper">
 
@@ -407,7 +412,124 @@ function removeFromArray(arr) {
     return arr;
 }
 
+//barchart
 
+var width = 550,
+    height = 200;
+
+var x = d3.scale.ordinal()
+    .rangeRoundBands([0, width], .1);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var chart = d3.select(".chart")
+    .attr("width", width)
+    .attr("height", height);
+
+var barcolor = d3.scale.ordinal()
+    //.range(["#386cb0", "#f0027f", "#7fc97f", "#beaed4", "#fdc086", "#ffff99"]);
+    .range(["#386cb0", "#beaed4", "#ffff99", "#f0027f", "#7fc97f", "#fdc086"]);
+	
+var bartip = d3.select("#bartip")
+ .attr("class", "bartip")
+ .style("opacity", 0);
+
+ 
+ 
+d3.tsv("data/communitydata.tsv", type, function(error, data) {
+
+
+ barcolor.domain(d3.keys(data[0]).filter(function(key) { return key === "SING_FAMLY" | 
+																key === "APARTMENT" |
+																key === "TOWN_HOUSE" |
+																key === "DUPLEX" |
+																key === "CONV_STRUC" |
+																key === "MULTI_PLEX" 
+																; }));
+ 
+ 
+   data.forEach(function(d) {
+    var y0 = 0;
+    d.dwelltypes = barcolor.domain().map(function(name) { return {comm: d.NAME, name: name, y0: y0, y1: y0 += +d[name]}; });
+    d.total = d.dwelltypes[d.dwelltypes.length - 1].y1;
+	console.log(d.dwelltypes);
+  });
+
+  data.sort(function(a, b) { return b.total - a.total; });
+
+  x.domain(data.map(function(d) { if(d.CLASS === "Residential"){return d.NAME;} }));
+  y.domain([0, d3.max(data, function(d) { return d.total; })]);
+
+  var bar = chart.selectAll("g")
+      .data(data)
+    .enter().append("g")
+      .attr("transform", function(d) { if(d.CLASS === "Residential") {return "translate(" + x(d.NAME) + ",0)"; }})
+	  .attr("id", function(d) { return "bar" + d.NAME;})
+	  ;
+
+ // bar.append("rect")
+ //     .attr("y", function(d) { return y(d.total); })
+ //     .attr("height", function(d) { return height - y(d.total); })
+ //     .attr("width", x.rangeBand())
+//	;
+  
+  bar.selectAll("rect")
+      .data(function(d) { return d.dwelltypes; })
+    .enter().append("rect")
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.y1); })
+      .attr("height", function(d) { return y(d.y0) - y(d.y1); })
+      .style("fill", function(d) { return barcolor(d.name); })
+	  .on("mouseover", barmouseover)
+	  .on("mouseout", function() {
+			d3.select(this).classed("selected", false);
+			bartip.transition().duration(300)
+			  .style("opacity", 0);
+			})
+	  ;
+	
+/*  bar.append("text")
+      .attr("x", x.rangeBand() / 2)
+      .attr("y", function(d) { return y(d.total) + 3; })
+      .attr("dy", ".75em")
+      .text(function(d) { return d.NAME });
+*/
+
+});
+
+function barmouseover(d) {
+			 d3.select(this).classed("selected", true);
+			 bartip.transition().duration(100)
+			   .style("opacity", 1)
+			// if (d3.event.pageX > (width - 200)) {
+			//	 bartip.style("left", (d3.event.pageX - 210) + "px");
+			// } else {
+				 bartip.style("left", (d3.event.pageX + 20) + "px")
+					  .style("top", (d3.event.pageY -30) + "px");
+			// }
+			// if (d3.event.pageY > (height - 150)) {
+			//	 bartip.style("top", (d3.event.pageY -140) + "px");
+			// } else {
+				 bartip.style("top", (d3.event.pageY -30) + "px");
+			 //}
+		
+			 bartip.select(".name").text(d.comm);
+			 bartip.select(".val").text(d.name);
+
+	
+}
+
+function type(d) {
+  d.SING_FAMLY = +d.SING_FAMLY; // coerce to number
+  d.DWELL_CNT = +d.DWELL_CNT; // coerce to number
+	d.DUPLEX = +d.DUPLEX;
+	d.MULTI_PLEX = +d.MULTI_PLEX;
+	d.APARTMENT = +d.APARTMENT;
+	d.TOWN_HOUSE = +d.TOWN_HOUSE;
+	d.CONV_STRUC = +d.CONV_STRUC;
+  return d;
+}
 
 
 </script>
