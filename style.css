@@ -91,6 +91,12 @@ div.tooltip .val { float: right; color: #aaa; width: 30px; text-align: right; }
 }
 
 
+path.qol, #metrics ul li.selected.qol, .tooltip .qol { fill: #386cb0; background: #386cb0; }
+path.safe, #metrics ul li.selected.safe, .tooltip .safe { fill: #beaed4; background: #beaed4; }
+path.proud, #metrics ul li.selected.proud, .tooltip .proud { fill: #ffff99; background: #ffff99; }
+path.taxvalue, #metrics ul li.selected.taxvalue, .tooltip .taxvalue { fill: #f0027f; background: #f0027f; } 
+path.satoverall, #metrics ul li.selected.satoverall, .tooltip .satoverall { fill: #7fc97f; background: #7fc97f; } 
+
 path.SING_FAMLY, #metrics ul li.selected.SING_FAMLY, .tooltip .SING_FAMLY { fill: #386cb0; background: #386cb0; }
 path.DUPLEX, #metrics ul li.selected.DUPLEX, .tooltip .DUPLEX { fill: #beaed4; background: #beaed4; }
 path.MULTI_PLEX, #metrics ul li.selected.MULTI_PLEX, .tooltip .MULTI_PLEX { fill: #ffff99; background: #ffff99; }
