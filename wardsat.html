@@ -7,10 +7,10 @@
 <div id="main-wrapper">
 
     <div id="metrics">
-        <div id="instruct"><em>Select one or more type of housing. <br/>Wards are coloured by most common among selection.</em></div>
+        <div id="instruct"><em>Select one or more question. <br/>Wards are coloured by highest among selection.</em></div>
     <!--    <div id="attributes"> -->
         <div id="housing">
-            <h3>Calgary Housing Stock</h3>
+            <h3>Citizen Satisfaction</h3>
             <ul>
          <!--   <li data-metric="attribute1" class="selected attribute1">One</li>
             <li data-metric="attribute2" class="selected attribute2">Two</li>
@@ -114,11 +114,11 @@ var baseColors = {
 */
 
 var baseColors = { 
-    "qol": d3.scale.linear().domain([55,100]).range(["#ffffff", "#386cb0"]).interpolate(d3.interpolateLab),
-    "safe": d3.scale.linear().domain([55,100]).range(["#ffffff", "#beaed4"]).interpolate(d3.interpolateLab),
-    "proud": d3.scale.linear().domain([55,100]).range(["#ffffff", "#ffff99"]).interpolate(d3.interpolateLab),
-    "taxvalue": d3.scale.linear().domain([55,100]).range(["#ffffff", "#f0027f"]).interpolate(d3.interpolateLab),
-    "satoverall": d3.scale.linear().domain([55,100]).range(["#ffffff", "#7fc97f"]).interpolate(d3.interpolateLab),
+    "qol": d3.scale.linear().domain([77,94]).range(["#ffffff", "#386cb0"]).interpolate(d3.interpolateLab),
+    "safe": d3.scale.linear().domain([65,94]).range(["#ffffff", "#beaed4"]).interpolate(d3.interpolateLab),
+    "proud": d3.scale.linear().domain([69,94]).range(["#ffffff", "#ffff99"]).interpolate(d3.interpolateLab),
+    "taxvalue": d3.scale.linear().domain([57,71]).range(["#ffffff", "#f0027f"]).interpolate(d3.interpolateLab),
+    "satoverall": d3.scale.linear().domain([69,84]).range(["#ffffff", "#7fc97f"]).interpolate(d3.interpolateLab),
 };
 
 
