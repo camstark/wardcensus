@@ -120,6 +120,9 @@ path.NODATA{ fill: #fff; }
 
 .clr { clear: both; }
 
+#chart-wrapper {
+	/*float: left;*/
+}
 .chart rect {
   fill: steelblue;
 }
